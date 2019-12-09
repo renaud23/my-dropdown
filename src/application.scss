@@ -1,0 +1,18 @@
+.application {
+  background-color: seashell;
+  color: green;
+  width: 500px;
+  height: 500px;
+
+  .simple-dropdown {
+    width: 250px;
+
+    margin-left: 25px;
+    margin-top: 32px;
+  }
+
+  .second {
+    margin-top: 55px;
+    max-width: 350px;
+  }
+}
