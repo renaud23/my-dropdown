@@ -1,0 +1,130 @@
+$inputHeight: 32px;
+
+@mixin defaultFont {
+  font-family: Georgia, Times, "Times New Roman", serif;
+  font-size: 16px;
+}
+/* */
+.custom-dropdown {
+  position: relative;
+  height: $inputHeight;
+  width: 100%;
+
+  /** */
+  .dropdown-label {
+  }
+
+  /** */
+  .dropdown-container {
+    position: absolute;
+    width: 100%;
+
+    &.focused {
+      outline: none;
+    }
+
+    /*** */
+    .dropdown-input {
+      display: block;
+      background-color: snow;
+      width: 100%;
+      border: none;
+      height: $inputHeight;
+      border-radius: 10px 10px;
+      box-shadow: 0em 0em 0.1em 0.1em #aaa;
+
+      &.focused {
+        box-shadow: 0 0 0 0.2em rgba(0, 123, 255, 0.25);
+      }
+
+      input {
+        @include defaultFont();
+        margin: 0px 25px 0px 12px;
+        width: calc(100% - 37px);
+        background-color: transparent;
+        height: $inputHeight;
+        border: none;
+        outline: none;
+      }
+    }
+
+    /*** */
+    .icone {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      cursor: pointer;
+    }
+
+    /*** */
+    .transition {
+      .dropdown-panel-container {
+        background-color: snow;
+        box-shadow: 0em 0em 0.1em 0.1em #999;
+        border-radius: 5px 5px;
+        padding: 2px 2px;
+        .dropdown-panel {
+          display: block;
+          padding: 0;
+          margin: 0;
+          list-style: none;
+          max-height: 100px;
+          overflow-y: scroll;
+
+          &:focus {
+            outline: none;
+          }
+
+          &.visible {
+          }
+
+          &.focused {
+          }
+
+          &:focus {
+          }
+
+          &.visible {
+          }
+
+          &:focus {
+          }
+
+          /** Scrollbar */
+          &::-webkit-scrollbar {
+            width: 8px;
+          }
+          &::-webkit-scrollbar-track {
+            border-radius: 0px 4px 4px 0px;
+            background-color: lightgray;
+          }
+          &::-webkit-scrollbar-thumb {
+            background: orange;
+          }
+          &::-webkit-scrollbar-thumb:hover {
+            background: goldenrod;
+          }
+
+          /** options style */
+          .dropdown-option {
+            display: block;
+            &.dropdown-option-active {
+              .prefix {
+              }
+            }
+
+            &.dropdown-option-selected {
+              .prefix {
+              }
+              &.dropdown-option-active {
+              }
+            }
+
+            .prefix {
+            }
+          }
+        }
+      }
+    }
+  }
+}

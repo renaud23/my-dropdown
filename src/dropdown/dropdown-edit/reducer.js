@@ -66,13 +66,14 @@ const reducer = (state, action) => {
       const { focused } = payload;
       return { ...state, focused };
     }
-
     case actions.RESET_SELECTION: {
       return {
         ...state,
         prefix: undefined,
         value: "",
-        selectedOption: undefined
+        selectedOption: undefined,
+        activeIndex: undefined,
+        visibleOptions: state.options
       };
     }
     default:
