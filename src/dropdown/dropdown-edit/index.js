@@ -1,15 +1,6 @@
 import React from "react";
 import DropdownEdit from "./dropdown-edit";
-
-const childrenToOption = (children = []) =>
-  (Array.isArray(children) ? children : [children]).map(child => {
-    const { value } = child.props;
-    const label = child.props.children;
-    if (label === undefined || value === undefined) {
-      throw new Error("Ooops");
-    }
-    return { label, value };
-  });
+import childrenToOption from "../commons/children-to-option";
 
 const createDropDown = Component => ({ children, options, ...props }) => {
   const o = options || childrenToOption(children);

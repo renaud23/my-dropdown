@@ -6,11 +6,9 @@ import Panel from "../commons/panel";
 import ClosedIcon from "../commons/closed.icon";
 import OpenedIcon from "../commons/opened.icon";
 import Label from "../commons/label";
-import CrossIcon from "./cross.icon";
-import { preparePrefix } from "./prefix-tools";
 import reducer, { initial } from "./reducer";
 import Option from "./option";
-import "./dropdown-edit.scss";
+import "./dropdown.scss";
 
 const CLEANER_CALLBACKS = {};
 
@@ -36,66 +34,28 @@ const onKeyDownCallback = (state, dispatch, onSelect) => e => {
   const { activeIndex, visibleOptions } = state;
   switch (e.key) {
     case BINDED_KEYS.arrowUp:
-      stopAndPrevent(e);
-      dispatch(
-        actions.setActiveOption(
-          visibleOptions.length
-            ? Math.max(0, activeIndex === undefined ? 0 : activeIndex - 1)
-            : undefined
-        )
-      );
-      dispatch(actions.showPanel());
       break;
     case BINDED_KEYS.arrowDown:
       stopAndPrevent(e);
-      dispatch(
-        actions.setActiveOption(
-          visibleOptions.length
-            ? Math.min(
-                visibleOptions.length - 1,
-                activeIndex === undefined ? 0 : activeIndex + 1
-              )
-            : undefined
-        )
-      );
-      dispatch(actions.showPanel());
       break;
-    case BINDED_KEYS.enter:
+    case BINDED_KEYS.enter: {
       stopAndPrevent(e);
-      if (activeIndex) {
-        const option = visibleOptions[activeIndex];
-        dispatch(actions.setSelectedOption(option));
-        dispatch(actions.hidePanel());
-        onSelect(option);
-      }
       break;
-    case BINDED_KEYS.tab:
-      dispatch(actions.setFocused(false));
-      dispatch(actions.hidePanel());
+    }
+    case BINDED_KEYS.tab: {
       break;
+    }
     default:
   }
 };
 
 /** */
-const onMouseDownCallback = ({ visible, id }, dispatch) => e => {
-  e.stopPropagation();
-  if (!visible) {
-    Object.entries(CLEANER_CALLBACKS).forEach(([k, todo]) => {
-      if (k !== id) {
-        todo();
-      }
-    });
-    dispatch(actions.showPanel());
-  }
-};
+const onMouseDownCallback = ({ visible, id }, dispatch) => e => {};
 
 /** */
 const onChangeCallback = (state, dispatch) => e => {
   e.stopPropagation();
   e.preventDefault();
-  dispatch(actions.setValue(e.target.value));
-  dispatch(actions.setPrefix(preparePrefix(e.target.value)));
 };
 
 /** */
@@ -124,16 +84,7 @@ const Dropdown = ({
     ...initial,
     id: `dropdown-${new Date().getMilliseconds()}`
   });
-  const {
-    prefix,
-    visible,
-    activeIndex,
-    visibleOptions,
-    selectedOption,
-    value,
-    focused,
-    id
-  } = state;
+  const { visible, activeIndex, selectedOption, value, focused, id } = state;
 
   CLEANER_CALLBACKS[id] = () => {
     dispatch(actions.hidePanel());
@@ -168,16 +119,16 @@ const Dropdown = ({
             : a,
         { index: -1, option: {} }
       );
-      dispatch(actions.setSelectedOption(option));
-      dispatch(actions.setActiveOption(index));
+      // dispatch(actions.setSelectedOption(option));
+      // dispatch(actions.setActiveOption(index));
     }
   }, [valueFromProps, options]);
 
   const inputEl = useRef();
 
   const onSelect_ = option => {
-    dispatch(actions.setSelectedOption(option));
-    dispatch(actions.hidePanel());
+    // dispatch(actions.setSelectedOption(option));
+    // dispatch(actions.hidePanel());
     onSelect(option);
   };
 
@@ -188,7 +139,7 @@ const Dropdown = ({
       id={id}
       onMouseDown={onMouseDownCallback(state, dispatch, "id")}
       onKeyDown={onKeyDownCallback(state, dispatch, onSelect)}
-      onFocus={() => dispatch(actions.setFocused(true))}
+      // onFocus={() => dispatch(actions.setFocused(true))}
     >
       {label ? <Label content={label} focused={focused} /> : null}
       <div
@@ -197,47 +148,22 @@ const Dropdown = ({
         className={classnames("dropdown-container", { visible, focused })}
       >
         <span className={classnames("dropdown-input", { focused })}>
-          <input
-            type="text"
-            ref={inputEl}
-            value={value}
-            placeholder={placeHolder}
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck="false"
-            tabIndex="0"
-            onFocus={() => dispatch(actions.setFocused(true))}
-            onBlur={() => null}
-            onChange={onChangeCallback(state, dispatch)}
-          />
+          <button />
         </span>
-        {prefix && prefix.length > 0 ? (
+        {
           <span
             className="icone"
             tabIndex="-1"
             onMouseDown={e => {
               e.stopPropagation();
-              inputEl.current.value = "";
-              dispatch(actions.resetSelection());
-            }}
-          >
-            <CrossIcon width={10} height={10} />
-          </span>
-        ) : (
-          <span
-            className="icone"
-            tabIndex="-1"
-            onMouseDown={e => {
-              e.stopPropagation();
-              if (visible) {
-                dispatch(actions.hidePanel());
-              } else dispatch(actions.showPanel());
+              // if (visible) {
+              //   dispatch(actions.hidePanel());
+              // } else dispatch(actions.showPanel());
             }}
           >
             {getIcon(visible)}
           </span>
-        )}
+        }
         <div
           tabIndex="-1"
           className={classnames("transition", {
@@ -245,9 +171,8 @@ const Dropdown = ({
           })}
         >
           <Panel
-            options={visibleOptions}
+            options={options}
             display={isDisplay(state)}
-            prefix={prefix}
             activeIndex={activeIndex}
             optionComponent={Option}
             selectedOption={selectedOption}

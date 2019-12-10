@@ -2,6 +2,7 @@ import "core-js";
 import React from "react";
 import ReactDOM from "react-dom";
 import DropdownEdit, { Option } from "./dropdown/dropdown-edit";
+import Dropdown, { Option as OptionSimple } from "./dropdown/dropdown";
 import "./application.scss";
 import "./custom-dropdown.scss";
 
