@@ -1,4 +1,4 @@
-import * as actions from "./actions";
+import * as actions from "../commons/actions";
 
 export const initial = {
   options: [],
@@ -13,9 +13,8 @@ export const initial = {
 const reducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
-    case actions.SWITCH_VISIBLE: {
-      const { visible } = state;
-      return { ...state, visible: !visible };
+    case actions.SHOW_PANEL: {
+      return { ...state, visible: true };
     }
     case actions.HIDE_PANEL: {
       return { ...state, visible: false };

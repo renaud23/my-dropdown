@@ -1,17 +1,15 @@
-import React, { useReducer, useEffect, useRef } from "react";
+import React, { useReducer, useEffect } from "react";
 import classnames from "classnames";
 import PropTypes from "prop-types";
-import * as actions from "./actions";
+import * as actions from "../commons/actions";
 import Panel from "../commons/panel";
 import ClosedIcon from "../commons/closed.icon";
 import OpenedIcon from "../commons/opened.icon";
 import Label from "../commons/label";
 import reducer, { initial } from "./reducer";
 import Option from "./option";
-// import * as CLEAN from "../commons/cleaner-callbacks";
+import * as CLEAN from "../commons/cleaner-callbacks";
 import "./dropdown.scss";
-
-const CLEANER_CALLBACKS = {};
 
 const BINDED_KEYS = {
   arrowUp: "ArrowUp",
@@ -45,7 +43,7 @@ const onKeyDownCallback = (state, dispatch, onSelect) => e => {
     }
     case BINDED_KEYS.tab: {
       dispatch(actions.setFocused(false));
-      dispatch(actions.switchVisible());
+      dispatch(actions.hidePanel());
       break;
     }
     default:
@@ -53,12 +51,12 @@ const onKeyDownCallback = (state, dispatch, onSelect) => e => {
 };
 
 /** */
-const onMouseDownCallback = ({ visible, id }, dispatch) => e => {};
-
-/** */
-const onChangeCallback = (state, dispatch) => e => {
+const onMouseDownCallback = ({ visible, id }, dispatch) => e => {
   e.stopPropagation();
-  e.preventDefault();
+  if (!visible) {
+    CLEAN.applyAll(id);
+    dispatch(actions.showPanel());
+  }
 };
 
 /** */
@@ -68,7 +66,12 @@ const getIcon = (_, dispatch) => visible => (
     tabIndex="-1"
     onMouseDown={e => {
       e.stopPropagation();
-      dispatch(actions.switchVisible());
+      e.preventDefault();
+      if (visible) {
+        dispatch(actions.hidePanel());
+      } else {
+        dispatch(actions.showPanel());
+      }
     }}
   >
     {visible ? (
@@ -99,10 +102,10 @@ const Dropdown = ({
   });
   const { visible, activeIndex, selectedOption, value, focused, id } = state;
 
-  CLEANER_CALLBACKS[id] = () => {
-    // dispatch(actions.hidePanel());
-    // dispatch(actions.setFocused(false));
-  };
+  CLEAN.add(id, () => {
+    dispatch(actions.hidePanel());
+    dispatch(actions.setFocused(false));
+  });
   useEffect(
     e => {
       const hook = e => {
@@ -113,7 +116,7 @@ const Dropdown = ({
 
       return () => {
         window.removeEventListener("mousedown", hook);
-        delete CLEANER_CALLBACKS[id];
+        CLEAN.clear(id);
       };
     },
     [id]
@@ -146,7 +149,7 @@ const Dropdown = ({
       id={id}
       onMouseDown={onMouseDownCallback(state, dispatch, "id")}
       onKeyDown={onKeyDownCallback(state, dispatch, onSelect)}
-      onFocus={() => dispatch(actions.switchVisible())}
+      onFocus={() => dispatch(actions.showPanel())}
     >
       {label ? <Label content={label} focused={focused} /> : null}
       <div

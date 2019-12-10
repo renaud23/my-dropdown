@@ -1,4 +1,4 @@
-import * as actions from "./actions";
+import * as actions from "../commons/actions";
 import { filterOption } from "./prefix-tools";
 import { preparePrefix } from "./prefix-tools";
 
@@ -15,6 +15,46 @@ export const initial = {
 
 const isPrefix = prefix => prefix !== undefined && prefix.length > 0;
 
+/** */
+const reduceArrowDownPressed = state => {
+  const { visibleOptions, activeIndex } = state;
+  const next = visibleOptions.length
+    ? Math.min(
+        visibleOptions.length - 1,
+        activeIndex === undefined ? 0 : activeIndex + 1
+      )
+    : undefined;
+  return { ...state, activeIndex: next };
+};
+
+/** */
+const reduceArrowUpPressed = state => {
+  const { visibleOptions, activeIndex } = state;
+  const next = visibleOptions.length
+    ? Math.max(0, activeIndex === undefined ? 0 : activeIndex - 1)
+    : undefined;
+
+  return { ...state, activeIndex: next };
+};
+
+/** */
+const reduceEnterPressed = (state, callback) => {
+  const { activeIndex, visibleOptions } = state;
+  if (activeIndex !== undefined) {
+    const option = visibleOptions[activeIndex];
+    callback(option);
+    return {
+      ...state,
+      selectedOption: option,
+      value: option.label,
+      prefix: preparePrefix(option.label),
+      visible: false
+    };
+  }
+  return state;
+};
+
+/**  */
 const reducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
@@ -75,6 +115,16 @@ const reducer = (state, action) => {
         activeIndex: undefined,
         visibleOptions: state.options
       };
+    }
+    case actions.ARROW_UP_PRESSED: {
+      return reduceArrowUpPressed(state);
+    }
+    case actions.ARROW_DOWN_PRESSED: {
+      return reduceArrowDownPressed(state);
+    }
+    case actions.ENTER_PRESSED: {
+      const { callback } = payload;
+      return reduceEnterPressed(state, callback);
     }
     default:
       return state;

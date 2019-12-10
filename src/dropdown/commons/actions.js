@@ -16,9 +16,6 @@ export const setOptions = options => ({
   payload: { options }
 });
 
-export const SET_PREFIX = "dropdown/set-prefix";
-export const setPrefix = prefix => ({ type: SET_PREFIX, payload: { prefix } });
-
 export const SET_VALUE = "dropdown/set-value";
 export const setValue = value => ({ type: SET_VALUE, payload: { value } });
 
@@ -38,3 +35,22 @@ export const RESET_SELECTION = "dropdown/reset-selection";
 export const resetSelection = option => ({
   type: RESET_SELECTION
 });
+
+/* */
+export const ARROW_UP_PRESSED = "dropdown/arrow-up-ressed";
+export const arrowUpPressed = () => ({ type: ARROW_UP_PRESSED });
+
+/* */
+export const ARROW_DOWN_PRESSED = "dropdown/arrow-down-pressed";
+export const arrowDownPressed = () => ({ type: ARROW_DOWN_PRESSED });
+
+/* */
+export const ENTER_PRESSED = "dropdown/enter-pressed";
+export const enterPressed = callback => ({
+  type: ENTER_PRESSED,
+  payload: { callback }
+});
+
+/*  */
+export const SET_PREFIX = "dropdown/set-prefix";
+export const setPrefix = prefix => ({ type: SET_PREFIX, payload: { prefix } });

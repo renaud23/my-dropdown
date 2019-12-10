@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect, useRef } from "react";
 import classnames from "classnames";
 import PropTypes from "prop-types";
-import * as actions from "./actions";
+import * as actions from "../commons/actions";
 import Panel from "../commons/panel";
 import ClosedIcon from "../commons/closed.icon";
 import OpenedIcon from "../commons/opened.icon";
@@ -11,14 +11,12 @@ import { preparePrefix } from "./prefix-tools";
 import reducer, { initial } from "./reducer";
 import Option from "./option";
 import * as CLEAN from "../commons/cleaner-callbacks";
+import onKeyDownCallback, { BINDED_KEYS } from "../commons/on-keydown-callback";
 import "./dropdown-edit.scss";
 
-const BINDED_KEYS = {
-  arrowUp: "ArrowUp",
-  arrowDown: "ArrowDown",
-  enter: "Enter",
-  tab: "Tab"
-};
+/* **/
+const isDisplay = ({ visible, visibleOptions }) =>
+  visible && visibleOptions.length > 0;
 
 /** */
 const stopAndPrevent = e => {
@@ -26,51 +24,15 @@ const stopAndPrevent = e => {
   e.stopPropagation();
 };
 
-/* **/
-const isDisplay = ({ visible, visibleOptions }) =>
-  visible && visibleOptions.length > 0;
-
 /** */
-const onKeyDownCallback = (state, dispatch, onSelect) => e => {
-  const { activeIndex, visibleOptions } = state;
+const onKeyDownCallback_ = (state, dispatch, onSelect) => e => {
   switch (e.key) {
-    case BINDED_KEYS.arrowUp:
-      stopAndPrevent(e);
-      dispatch(
-        actions.setActiveOption(
-          visibleOptions.length
-            ? Math.max(0, activeIndex === undefined ? 0 : activeIndex - 1)
-            : undefined
-        )
-      );
-      dispatch(actions.showPanel());
-      break;
-    case BINDED_KEYS.arrowDown:
-      stopAndPrevent(e);
-      dispatch(
-        actions.setActiveOption(
-          visibleOptions.length
-            ? Math.min(
-                visibleOptions.length - 1,
-                activeIndex === undefined ? 0 : activeIndex + 1
-              )
-            : undefined
-        )
-      );
-      dispatch(actions.showPanel());
-      break;
     case BINDED_KEYS.enter:
-      stopAndPrevent(e);
-      if (activeIndex) {
-        const option = visibleOptions[activeIndex];
-        dispatch(actions.setSelectedOption(option));
-        dispatch(actions.hidePanel());
-        onSelect(option);
-      }
-      break;
+    case BINDED_KEYS.arrowUp:
+    case BINDED_KEYS.arrowDown:
     case BINDED_KEYS.tab:
-      dispatch(actions.setFocused(false));
-      dispatch(actions.hidePanel());
+      stopAndPrevent(e);
+      onKeyDownCallback(state, dispatch, onSelect)(e.key);
       break;
     default:
   }
@@ -182,7 +144,7 @@ const Dropdown = ({
       tabIndex="-1"
       id={id}
       onMouseDown={onMouseDownCallback(state, dispatch, "id")}
-      onKeyDown={onKeyDownCallback(state, dispatch, onSelect)}
+      onKeyDown={onKeyDownCallback_(state, dispatch, onSelect)}
       onFocus={() => dispatch(actions.setFocused(true))}
     >
       {label ? <Label content={label} focused={focused} /> : null}
