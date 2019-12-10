@@ -17,27 +17,29 @@ const Panel = ({
   const ulRef = useRef();
 
   return display ? (
-    <ul className="dropdown-panel" ref={ulRef} tabIndex="-1">
-      {options.map(({ label, value }, index) => (
-        <li
-          key={value}
-          onMouseEnter={() => handleActive(index)}
-          onClick={e => {
-            e.stopPropagation();
-            e.preventDefault();
-            onSelect({ label, value });
-          }}
-        >
-          <Option
-            label={label}
-            value={value}
-            prefix={prefix}
-            active={activeIndex === index}
-            selected={selectedOption && selectedOption.value === value}
-          />
-        </li>
-      ))}
-    </ul>
+    <div className="dropdown-panel-container">
+      <ul className="dropdown-panel" ref={ulRef} tabIndex="-1">
+        {options.map(({ label, value }, index) => (
+          <li
+            key={value}
+            onMouseEnter={() => handleActive(index)}
+            onClick={e => {
+              e.stopPropagation();
+              e.preventDefault();
+              onSelect({ label, value });
+            }}
+          >
+            <Option
+              label={label}
+              value={value}
+              prefix={prefix}
+              active={activeIndex === index}
+              selected={selectedOption && selectedOption.value === value}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
   ) : null;
 };
 

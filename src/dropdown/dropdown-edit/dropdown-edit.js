@@ -114,6 +114,7 @@ const Dropdown = ({
   options = [],
   children,
   onSelect,
+  className,
   placeHolder,
   label,
   value: valueFromProps,
@@ -182,7 +183,7 @@ const Dropdown = ({
 
   return (
     <div
-      className={classnames("dropdown")}
+      className={className ? className : "dropdown"}
       tabIndex="-1"
       id={id}
       onMouseDown={onMouseDownCallback(state, dispatch, "id")}
@@ -195,20 +196,22 @@ const Dropdown = ({
         style={{ zIndex: zIndex || 0 }}
         className={classnames("dropdown-container", { visible, focused })}
       >
-        <input
-          type="text"
-          ref={inputEl}
-          value={value}
-          placeholder={placeHolder}
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          spellCheck="false"
-          tabIndex="0"
-          onFocus={() => dispatch(actions.setFocused(true))}
-          onBlur={() => null}
-          onChange={onChangeCallback(state, dispatch)}
-        />
+        <span className={classnames("dropdown-input", { focused })}>
+          <input
+            type="text"
+            ref={inputEl}
+            value={value}
+            placeholder={placeHolder}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
+            tabIndex="0"
+            onFocus={() => dispatch(actions.setFocused(true))}
+            onBlur={() => null}
+            onChange={onChangeCallback(state, dispatch)}
+          />
+        </span>
         {prefix && prefix.length > 0 ? (
           <span
             className="icone"
@@ -259,6 +262,7 @@ const Dropdown = ({
 
 Dropdown.propTypes = {
   zIndex: PropTypes.number,
+  className: PropTypes.string,
   id: PropTypes.string,
   options: PropTypes.array.isRequired,
   onSelect: PropTypes.func,

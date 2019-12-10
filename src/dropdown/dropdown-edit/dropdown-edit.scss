@@ -72,6 +72,10 @@ $boxShadowColor: #aaa;
       overflow-y: hidden;
       opacity: 0;
 
+      &:focus {
+        outline: none;
+      }
+
       &.visible {
         visibility: visible;
         opacity: 1;
@@ -132,10 +136,15 @@ $boxShadowColor: #aaa;
 
         &.dropdown-option-selected {
           color: snow;
-          background-color: navy;
+          background-color: rgb(136, 19, 151);
           .prefix {
             color: lightgray;
             font-weight: bold;
+          }
+
+          &.dropdown-option-active {
+            color: khaki;
+            background-color: rgb(188, 90, 201);
           }
         }
 
