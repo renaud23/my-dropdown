@@ -10,9 +10,8 @@ import CrossIcon from "./cross.icon";
 import { preparePrefix } from "./prefix-tools";
 import reducer, { initial } from "./reducer";
 import Option from "./option";
+import * as CLEAN from "../commons/cleaner-callbacks";
 import "./dropdown-edit.scss";
-
-const CLEANER_CALLBACKS = {};
 
 const BINDED_KEYS = {
   arrowUp: "ArrowUp",
@@ -81,11 +80,7 @@ const onKeyDownCallback = (state, dispatch, onSelect) => e => {
 const onMouseDownCallback = ({ visible, id }, dispatch) => e => {
   e.stopPropagation();
   if (!visible) {
-    Object.entries(CLEANER_CALLBACKS).forEach(([k, todo]) => {
-      if (k !== id) {
-        todo();
-      }
-    });
+    CLEAN.applyAll(id);
     dispatch(actions.showPanel());
   }
 };
@@ -135,10 +130,10 @@ const Dropdown = ({
     id
   } = state;
 
-  CLEANER_CALLBACKS[id] = () => {
+  CLEAN.add(id, () => {
     dispatch(actions.hidePanel());
     dispatch(actions.setFocused(false));
-  };
+  });
   useEffect(
     e => {
       const hook = e => {
@@ -149,7 +144,7 @@ const Dropdown = ({
 
       return () => {
         window.removeEventListener("mousedown", hook);
-        delete CLEANER_CALLBACKS[id];
+        CLEAN.clear(id);
       };
     },
     [id]
@@ -183,7 +178,7 @@ const Dropdown = ({
 
   return (
     <div
-      className={className ? className : "dropdown"}
+      className={classnames(className ? className : "dropdown", { focused })}
       tabIndex="-1"
       id={id}
       onMouseDown={onMouseDownCallback(state, dispatch, "id")}
@@ -208,7 +203,6 @@ const Dropdown = ({
             spellCheck="false"
             tabIndex="0"
             onFocus={() => dispatch(actions.setFocused(true))}
-            onBlur={() => null}
             onChange={onChangeCallback(state, dispatch)}
           />
         </span>

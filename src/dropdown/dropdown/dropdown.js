@@ -8,6 +8,7 @@ import OpenedIcon from "../commons/opened.icon";
 import Label from "../commons/label";
 import reducer, { initial } from "./reducer";
 import Option from "./option";
+// import * as CLEAN from "../commons/cleaner-callbacks";
 import "./dropdown.scss";
 
 const CLEANER_CALLBACKS = {};
@@ -26,12 +27,12 @@ const stopAndPrevent = e => {
 };
 
 /* **/
-const isDisplay = ({ visible, visibleOptions }) =>
-  visible && visibleOptions.length > 0;
+const isDisplay = ({ visible, options }) => visible && options.length > 0;
 
 /** */
 const onKeyDownCallback = (state, dispatch, onSelect) => e => {
-  const { activeIndex, visibleOptions } = state;
+  const { activeIndex, options } = state;
+
   switch (e.key) {
     case BINDED_KEYS.arrowUp:
       break;
@@ -43,6 +44,8 @@ const onKeyDownCallback = (state, dispatch, onSelect) => e => {
       break;
     }
     case BINDED_KEYS.tab: {
+      dispatch(actions.setFocused(false));
+      dispatch(actions.switchVisible());
       break;
     }
     default:
@@ -59,12 +62,22 @@ const onChangeCallback = (state, dispatch) => e => {
 };
 
 /** */
-const getIcon = visible =>
-  visible ? (
-    <OpenedIcon width={10} height={10} />
-  ) : (
-    <ClosedIcon width={10} height={10} />
-  );
+const getIcon = (_, dispatch) => visible => (
+  <span
+    className="icone"
+    tabIndex="-1"
+    onMouseDown={e => {
+      e.stopPropagation();
+      dispatch(actions.switchVisible());
+    }}
+  >
+    {visible ? (
+      <OpenedIcon width={10} height={10} />
+    ) : (
+      <ClosedIcon width={10} height={10} />
+    )}
+  </span>
+);
 
 /**
  *
@@ -87,8 +100,8 @@ const Dropdown = ({
   const { visible, activeIndex, selectedOption, value, focused, id } = state;
 
   CLEANER_CALLBACKS[id] = () => {
-    dispatch(actions.hidePanel());
-    dispatch(actions.setFocused(false));
+    // dispatch(actions.hidePanel());
+    // dispatch(actions.setFocused(false));
   };
   useEffect(
     e => {
@@ -111,27 +124,21 @@ const Dropdown = ({
   }, [options, children]);
 
   useEffect(() => {
-    if (valueFromProps) {
-      const { option, index } = options.reduce(
-        (a, o, i) =>
-          o.value === valueFromProps && a.index === -1
-            ? { index: i, option: o }
-            : a,
-        { index: -1, option: {} }
+    if (valueFromProps !== undefined) {
+      const option = options.reduce(
+        (a, o, i) => (o.value === valueFromProps ? o : a),
+        {}
       );
-      // dispatch(actions.setSelectedOption(option));
+      dispatch(actions.setSelectedOption(option));
       // dispatch(actions.setActiveOption(index));
     }
   }, [valueFromProps, options]);
-
-  const inputEl = useRef();
 
   const onSelect_ = option => {
     // dispatch(actions.setSelectedOption(option));
     // dispatch(actions.hidePanel());
     onSelect(option);
   };
-
   return (
     <div
       className={className ? className : "dropdown"}
@@ -139,7 +146,7 @@ const Dropdown = ({
       id={id}
       onMouseDown={onMouseDownCallback(state, dispatch, "id")}
       onKeyDown={onKeyDownCallback(state, dispatch, onSelect)}
-      // onFocus={() => dispatch(actions.setFocused(true))}
+      onFocus={() => dispatch(actions.switchVisible())}
     >
       {label ? <Label content={label} focused={focused} /> : null}
       <div
@@ -147,23 +154,12 @@ const Dropdown = ({
         style={{ zIndex: zIndex || 0 }}
         className={classnames("dropdown-container", { visible, focused })}
       >
-        <span className={classnames("dropdown-input", { focused })}>
-          <button />
+        <span className={classnames("dropdown-button", { focused })}>
+          <button>
+            {selectedOption ? selectedOption.label : placeHolder || ""}
+          </button>
         </span>
-        {
-          <span
-            className="icone"
-            tabIndex="-1"
-            onMouseDown={e => {
-              e.stopPropagation();
-              // if (visible) {
-              //   dispatch(actions.hidePanel());
-              // } else dispatch(actions.showPanel());
-            }}
-          >
-            {getIcon(visible)}
-          </span>
-        }
+        {getIcon(state, dispatch)(visible)}
         <div
           tabIndex="-1"
           className={classnames("transition", {
@@ -177,7 +173,7 @@ const Dropdown = ({
             optionComponent={Option}
             selectedOption={selectedOption}
             onSelect={onSelect_}
-            handleActive={index => dispatch(actions.setActiveOption(index))}
+            handleActive={index => null}
           />
         </div>
       </div>

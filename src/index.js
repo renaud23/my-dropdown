@@ -56,17 +56,22 @@ ReactDOM.render(
       </DropdownEdit>
     </div>
     <div className="second">
-      <DropdownEdit
-        value={0}
+      <Dropdown
+        value={3}
         zIndex={0}
         onSelect={item => console.log("onSelect", item)}
         label="Test avec trucs."
       >
-        <Option value={"0"}>
-          Un libellé long avec des accents - tout le toutim.
-        </Option>
-        <Option value={"1"}>Un libellé court.</Option>
-      </DropdownEdit>
+        <OptionSimple value={0}>Java</OptionSimple>
+        <OptionSimple value={1}>Haskel</OptionSimple>
+        <OptionSimple value={2}>C</OptionSimple>
+        <OptionSimple value={3}>C#</OptionSimple>
+        <OptionSimple value={4}>JavaScript</OptionSimple>
+        <OptionSimple value={5}>Camel</OptionSimple>
+        <OptionSimple value={6}>Perl</OptionSimple>
+        <OptionSimple value={7}>Python</OptionSimple>
+        <OptionSimple value={8}>Lisp</OptionSimple>
+      </Dropdown>
     </div>
     <p>
       <select>
