@@ -22,8 +22,10 @@ const onKeyDownCallback_ = (state, dispatch, onSelect) => e => {
     case BINDED_KEYS.enter:
     case BINDED_KEYS.arrowUp:
     case BINDED_KEYS.arrowDown:
-    case BINDED_KEYS.tab:
       stopAndPrevent(e);
+      onKeyDownCallback(state, dispatch, onSelect)(e.key);
+      break;
+    case BINDED_KEYS.tab:
       onKeyDownCallback(state, dispatch, onSelect)(e.key);
       break;
     default:

@@ -47,7 +47,10 @@ const reduceArrowUpPressed = state => {
 
 /** */
 const reduceEnterPressed = (state, callback) => {
-  const { activeIndex, visibleOptions } = state;
+  const { activeIndex, visibleOptions, visible } = state;
+  if (!visible) {
+    return { ...state, visible: true };
+  }
   if (activeIndex !== undefined) {
     const option = visibleOptions[activeIndex];
     callback(option);

@@ -4,12 +4,10 @@ import PropTypes from "prop-types";
 import * as actions from "../commons/actions";
 import Panel from "../commons/components/panel";
 import DropdownContainer from "../commons/components/dropdown-container";
-import ClosedIcon from "../commons/components/closed.icon";
-import OpenedIcon from "../commons/components/opened.icon";
-import CrossIcon from "./cross.icon";
 import { preparePrefix } from "./prefix-tools";
 import reducer, { initial } from "./reducer";
 import Option from "./option";
+import Icone from "./icone";
 import "./dropdown-edit.scss";
 
 /* **/
@@ -25,13 +23,6 @@ const onChangeCallback = (state, dispatch) => e => {
 };
 
 /** */
-const getIcon = visible =>
-  visible ? (
-    <OpenedIcon width={10} height={10} />
-  ) : (
-    <ClosedIcon width={10} height={10} />
-  );
-
 const createOnSelect = (_, dispatch, onSelect) => option => {
   dispatch(actions.setSelectedOption(option));
   dispatch(actions.hidePanel());
@@ -84,7 +75,7 @@ const Dropdown = ({
           ref={inputEl}
           value={value}
           placeholder={placeHolder}
-          autoComplete="off"
+          autoComplete="list"
           autoCorrect="off"
           autoCapitalize="off"
           spellCheck="false"
@@ -93,32 +84,21 @@ const Dropdown = ({
           onChange={onChangeCallback(state, dispatch)}
         />
       </span>
-      {prefix && prefix.length > 0 ? (
-        <span
-          className="icone"
-          tabIndex="-1"
-          onMouseDown={e => {
-            e.stopPropagation();
-            inputEl.current.value = "";
-            dispatch(actions.resetSelection());
-          }}
-        >
-          <CrossIcon width={10} height={10} />
-        </span>
-      ) : (
-        <span
-          className="icone"
-          tabIndex="-1"
-          onMouseDown={e => {
-            e.stopPropagation();
-            if (visible) {
-              dispatch(actions.hidePanel());
-            } else dispatch(actions.showPanel());
-          }}
-        >
-          {getIcon(visible)}
-        </span>
-      )}
+      <Icone
+        prefix={prefix}
+        visible={visible}
+        onDelete={e => {
+          e.stopPropagation();
+          inputEl.current.value = "";
+          dispatch(actions.resetSelection());
+        }}
+        onSwitch={e => {
+          e.stopPropagation();
+          if (visible) {
+            dispatch(actions.hidePanel());
+          } else dispatch(actions.showPanel());
+        }}
+      />
       <div
         tabIndex="-1"
         className={classnames("transition", {
