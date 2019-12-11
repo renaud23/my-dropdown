@@ -1,63 +1,17 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer } from "react";
 import classnames from "classnames";
 import PropTypes from "prop-types";
 import * as actions from "../commons/actions";
-import Panel from "../commons/panel";
-import ClosedIcon from "../commons/closed.icon";
-import OpenedIcon from "../commons/opened.icon";
-import Label from "../commons/label";
+import Panel from "../commons/components/panel";
+import ClosedIcon from "../commons/components/closed.icon";
+import OpenedIcon from "../commons/components/opened.icon";
+import DropdownContainer from "../commons/components/dropdown-container";
 import reducer, { initial } from "./reducer";
 import Option from "./option";
-import * as CLEAN from "../commons/cleaner-callbacks";
 import "./dropdown.scss";
-
-const BINDED_KEYS = {
-  arrowUp: "ArrowUp",
-  arrowDown: "ArrowDown",
-  enter: "Enter",
-  tab: "Tab"
-};
-
-/** */
-const stopAndPrevent = e => {
-  e.preventDefault();
-  e.stopPropagation();
-};
 
 /* **/
 const isDisplay = ({ visible, options }) => visible && options.length > 0;
-
-/** */
-const onKeyDownCallback = (state, dispatch, onSelect) => e => {
-  const { activeIndex, options } = state;
-
-  switch (e.key) {
-    case BINDED_KEYS.arrowUp:
-      break;
-    case BINDED_KEYS.arrowDown:
-      stopAndPrevent(e);
-      break;
-    case BINDED_KEYS.enter: {
-      stopAndPrevent(e);
-      break;
-    }
-    case BINDED_KEYS.tab: {
-      dispatch(actions.setFocused(false));
-      dispatch(actions.hidePanel());
-      break;
-    }
-    default:
-  }
-};
-
-/** */
-const onMouseDownCallback = ({ visible, id }, dispatch) => e => {
-  e.stopPropagation();
-  if (!visible) {
-    CLEAN.applyAll(id);
-    dispatch(actions.showPanel());
-  }
-};
 
 /** */
 const getIcon = (_, dispatch) => visible => (
@@ -82,13 +36,14 @@ const getIcon = (_, dispatch) => visible => (
   </span>
 );
 
-/**
- *
- * @param {*} param0
- */
+const createOnSelect = (_, dispatch, onSelect) => option => {
+  dispatch(actions.setSelectedOption(option));
+  dispatch(actions.hidePanel());
+  onSelect(option);
+};
+
 const Dropdown = ({
   options = [],
-  children,
   onSelect,
   className,
   placeHolder,
@@ -100,87 +55,42 @@ const Dropdown = ({
     ...initial,
     id: `dropdown-${new Date().getMilliseconds()}`
   });
-  const { visible, activeIndex, selectedOption, value, focused, id } = state;
-
-  CLEAN.add(id, () => {
-    dispatch(actions.hidePanel());
-    dispatch(actions.setFocused(false));
-  });
-  useEffect(
-    e => {
-      const hook = e => {
-        dispatch(actions.hidePanel());
-        dispatch(actions.setFocused(false));
-      };
-      window.addEventListener("mousedown", hook);
-
-      return () => {
-        window.removeEventListener("mousedown", hook);
-        CLEAN.clear(id);
-      };
-    },
-    [id]
-  );
-
-  useEffect(() => {
-    dispatch(actions.setOptions(options));
-  }, [options, children]);
-
-  useEffect(() => {
-    if (valueFromProps !== undefined) {
-      const option = options.reduce(
-        (a, o, i) => (o.value === valueFromProps ? o : a),
-        {}
-      );
-      dispatch(actions.setSelectedOption(option));
-      // dispatch(actions.setActiveOption(index));
-    }
-  }, [valueFromProps, options]);
-
-  const onSelect_ = option => {
-    // dispatch(actions.setSelectedOption(option));
-    // dispatch(actions.hidePanel());
-    onSelect(option);
-  };
+  const { focused, selectedOption, visible, activeIndex } = state;
+  const onSelect_ = createOnSelect(state, dispatch, onSelect);
   return (
-    <div
-      className={className ? className : "dropdown"}
-      tabIndex="-1"
-      id={id}
-      onMouseDown={onMouseDownCallback(state, dispatch, "id")}
-      onKeyDown={onKeyDownCallback(state, dispatch, onSelect)}
-      onFocus={() => dispatch(actions.showPanel())}
+    <DropdownContainer
+      className={className}
+      state={state}
+      dispatch={dispatch}
+      options={options}
+      label={label}
+      onSelect={onSelect_}
+      value={valueFromProps}
+      zIndex={zIndex}
     >
-      {label ? <Label content={label} focused={focused} /> : null}
+      <span className={classnames("dropdown-button", { focused })}>
+        <button>
+          {selectedOption ? selectedOption.label : placeHolder || ""}
+        </button>
+      </span>
+      {getIcon(state, dispatch)(visible)}
       <div
         tabIndex="-1"
-        style={{ zIndex: zIndex || 0 }}
-        className={classnames("dropdown-container", { visible, focused })}
+        className={classnames("transition", {
+          visible: isDisplay(state)
+        })}
       >
-        <span className={classnames("dropdown-button", { focused })}>
-          <button>
-            {selectedOption ? selectedOption.label : placeHolder || ""}
-          </button>
-        </span>
-        {getIcon(state, dispatch)(visible)}
-        <div
-          tabIndex="-1"
-          className={classnames("transition", {
-            visible: isDisplay(state)
-          })}
-        >
-          <Panel
-            options={options}
-            display={isDisplay(state)}
-            activeIndex={activeIndex}
-            optionComponent={Option}
-            selectedOption={selectedOption}
-            onSelect={onSelect_}
-            handleActive={index => null}
-          />
-        </div>
+        <Panel
+          options={options}
+          display={isDisplay(state)}
+          activeIndex={activeIndex}
+          optionComponent={Option}
+          selectedOption={selectedOption}
+          onSelect={onSelect_}
+          handleActive={index => null}
+        />
       </div>
-    </div>
+    </DropdownContainer>
   );
 };
 

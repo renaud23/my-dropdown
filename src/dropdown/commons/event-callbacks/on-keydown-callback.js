@@ -1,4 +1,4 @@
-import * as actions from "../commons/actions";
+import * as actions from "../actions";
 
 export const BINDED_KEYS = {
   arrowUp: "ArrowUp",
