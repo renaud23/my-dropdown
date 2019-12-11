@@ -14,7 +14,7 @@ $boxShadowColor: #aaa;
   -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
 }
 
-.dropdown {
+.lunatic-dropdown {
   display: block;
   position: relative;
   height: $inputHeight;
@@ -23,7 +23,7 @@ $boxShadowColor: #aaa;
     outline: none;
   }
 
-  .dropdown-label {
+  .lunatic-dropdown-label {
     @include defaultFont();
     color: rgb(0, 123, 255);
     position: absolute;
@@ -32,7 +32,7 @@ $boxShadowColor: #aaa;
     opacity: 1;
   }
 
-  .dropdown-container {
+  .lunatic-dropdown-container {
     background-color: lavenderblush;
     border-radius: 20px 20px;
     position: absolute;
@@ -66,7 +66,7 @@ $boxShadowColor: #aaa;
       outline: none;
     }
 
-    .icone {
+    .lunatic-icone {
       cursor: pointer;
       position: absolute;
       right: 10px;
@@ -76,7 +76,7 @@ $boxShadowColor: #aaa;
       }
     }
 
-    .transition {
+    .lunatic-transition {
       visibility: hidden;
       overflow-y: hidden;
       opacity: 0;
@@ -91,7 +91,7 @@ $boxShadowColor: #aaa;
         transition: opacity 1s ease-out;
       }
 
-      .dropdown-panel {
+      .lunatic-dropdown-panel {
         background-color: transparent;
         margin: 0 10px 12px 10px;
         list-style: none;
@@ -124,7 +124,7 @@ $boxShadowColor: #aaa;
       }
 
       /** options style */
-      .dropdown-option {
+      .lunatic-dropdown-option {
         cursor: pointer;
         @include defaultFont();
         white-space: nowrap;
@@ -134,30 +134,30 @@ $boxShadowColor: #aaa;
 
         display: block;
 
-        &.dropdown-option-active {
+        &.lunatic-dropdown-option-active {
           color: ivory;
           background-color: midnightblue;
-          .prefix {
+          .lunatic-prefix {
             color: darkgoldenrod;
             font-weight: bold;
           }
         }
 
-        &.dropdown-option-selected {
+        &.lunatic-dropdown-option-selected {
           color: snow;
           background-color: rgb(136, 19, 151);
-          .prefix {
+          .lunatic-prefix {
             color: lightgray;
             font-weight: bold;
           }
 
-          &.dropdown-option-active {
+          &.lunatic-dropdown-option-active {
             color: khaki;
             background-color: rgb(188, 90, 201);
           }
         }
 
-        .prefix {
+        .lunatic-prefix {
           color: cornflowerblue;
           font-weight: bold;
         }

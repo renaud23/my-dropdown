@@ -69,7 +69,7 @@ const Dropdown = ({
       value={valueFromProps}
       zIndex={zIndex}
     >
-      <span className={classnames("dropdown-input", { focused })}>
+      <span className={classnames("lunatic-dropdown-input", { focused })}>
         <input
           type="text"
           ref={inputEl}
@@ -101,7 +101,7 @@ const Dropdown = ({
       />
       <div
         tabIndex="-1"
-        className={classnames("transition", {
+        className={classnames("lunatic-transition", {
           visible: isDisplay(state)
         })}
       >

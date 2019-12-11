@@ -18,8 +18,8 @@ const Panel = ({
   const ulRef = useRef();
 
   return display ? (
-    <div className="dropdown-panel-container">
-      <ul className="dropdown-panel" ref={ulRef} tabIndex="-1">
+    <div className="lunatic-dropdown-panel-container">
+      <ul className="lunatic-dropdown-panel" ref={ulRef} tabIndex="-1">
         {options.map(({ label, value }, index) => (
           <li
             key={value}

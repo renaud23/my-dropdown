@@ -13,11 +13,11 @@ const getIcon = visible =>
 
 const Icone = ({ prefix, visible, onDelete, onSwitch }) =>
   prefix && prefix.length > 0 ? (
-    <span className="icone" tabIndex="-1" onMouseDown={onDelete}>
+    <span className="lunatic-icone" tabIndex="-1" onMouseDown={onDelete}>
       <CrossIcon width={10} height={10} />
     </span>
   ) : (
-    <span className="icone" tabIndex="-1" onMouseDown={onSwitch}>
+    <span className="lunatic-icone" tabIndex="-1" onMouseDown={onSwitch}>
       {getIcon(visible)}
     </span>
   );

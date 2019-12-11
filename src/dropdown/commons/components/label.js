@@ -3,7 +3,9 @@ import classnames from "classnames";
 import PropTypes from "prop-types";
 
 const Label = ({ content, focused }) => (
-  <div className={classnames("dropdown-label", { focused })}>{content}</div>
+  <div className={classnames("lunatic-dropdown-label", { focused })}>
+    {content}
+  </div>
 );
 
 Label.propTypes = {

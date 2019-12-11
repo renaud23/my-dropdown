@@ -85,7 +85,9 @@ const DropdownContainer = ({
 
   return (
     <div
-      className={classnames(className ? className : "dropdown", { focused })}
+      className={classnames(className ? className : "lunatic-dropdown", {
+        focused
+      })}
       tabIndex="-1"
       id={id}
       onMouseDown={onMouseDownCallback(state, dispatch, "id")}
@@ -96,7 +98,10 @@ const DropdownContainer = ({
       <div
         tabIndex="-1"
         style={{ zIndex: zIndex || 0 }}
-        className={classnames("dropdown-container", { visible, focused })}
+        className={classnames("lunatic-dropdown-container", {
+          visible,
+          focused
+        })}
       >
         {children}
       </div>

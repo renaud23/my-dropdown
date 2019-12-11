@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import DropdownEdit, { Option } from "./dropdown/dropdown-edit";
 import Dropdown, { Option as OptionSimple } from "./dropdown/dropdown";
 import "./application.scss";
-import "./custom-dropdown.scss";
+import "./dropdown/themes/dropdown-classic.scss";
 
 ReactDOM.render(
   <div className="application">
@@ -38,7 +38,7 @@ ReactDOM.render(
     </p>
     <div className="simple-dropdown">
       <DropdownEdit
-        className="custom-dropdown"
+        className="classic-lunatic-dropdown"
         value={4}
         zIndex={1}
         onSelect={item => console.log("onSelect", item)}

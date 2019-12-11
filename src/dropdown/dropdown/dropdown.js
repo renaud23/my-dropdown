@@ -16,7 +16,7 @@ const isDisplay = ({ visible, options }) => visible && options.length > 0;
 /** */
 const getIcon = (_, dispatch) => visible => (
   <span
-    className="icone"
+    className="lunatic-icone"
     tabIndex="-1"
     onMouseDown={e => {
       e.stopPropagation();
@@ -68,7 +68,7 @@ const Dropdown = ({
       value={valueFromProps}
       zIndex={zIndex}
     >
-      <span className={classnames("dropdown-button", { focused })}>
+      <span className={classnames("lunatic-dropdown-button", { focused })}>
         <button>
           {selectedOption ? selectedOption.label : placeHolder || ""}
         </button>
@@ -76,7 +76,7 @@ const Dropdown = ({
       {getIcon(state, dispatch)(visible)}
       <div
         tabIndex="-1"
-        className={classnames("transition", {
+        className={classnames("lunatic-transition", {
           visible: isDisplay(state)
         })}
       >
