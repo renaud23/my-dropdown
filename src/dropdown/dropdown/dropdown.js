@@ -88,7 +88,7 @@ const Dropdown = ({
           optionComponent={Option}
           selectedOption={selectedOption}
           onSelect={onSelect_}
-          handleActive={index => null}
+          handleActive={index => dispatch(actions.setActiveOption(index))}
         />
       </div>
     </DropdownContainer>
