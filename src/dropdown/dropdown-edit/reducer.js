@@ -1,6 +1,7 @@
 import * as actions from "../commons/actions";
 import { filterOption } from "./prefix-tools";
 import { preparePrefix } from "./prefix-tools";
+import { scrollTo } from "../commons/tools";
 
 export const initial = {
   prefix: undefined,
@@ -13,6 +14,7 @@ export const initial = {
   value: ""
 };
 
+/** */
 const isPrefix = prefix => prefix !== undefined && prefix.length > 0;
 
 /** */
@@ -24,6 +26,9 @@ const reduceArrowDownPressed = state => {
         activeIndex === undefined ? 0 : activeIndex + 1
       )
     : undefined;
+  if (next !== undefined) {
+    scrollTo(`${state.id}-option-${visibleOptions[next].value}`);
+  }
   return { ...state, activeIndex: next };
 };
 
@@ -34,6 +39,9 @@ const reduceArrowUpPressed = state => {
     ? Math.max(0, activeIndex === undefined ? 0 : activeIndex - 1)
     : undefined;
 
+  if (next !== undefined) {
+    scrollTo(`${state.id}-option-${visibleOptions[next].value}`);
+  }
   return { ...state, activeIndex: next };
 };
 
@@ -66,7 +74,10 @@ const reducer = (state, action) => {
     }
     case actions.SET_ACTIVE_OPTION: {
       const { index } = payload;
-      return { ...state, activeIndex: index };
+      return {
+        ...state,
+        activeIndex: index
+      };
     }
     case actions.SET_OPTIONS: {
       const { options } = payload;
@@ -113,6 +124,7 @@ const reducer = (state, action) => {
         value: "",
         selectedOption: undefined,
         activeIndex: undefined,
+        activeOption: undefined,
         visibleOptions: state.options
       };
     }

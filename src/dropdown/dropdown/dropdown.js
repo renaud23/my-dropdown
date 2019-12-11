@@ -55,7 +55,7 @@ const Dropdown = ({
     ...initial,
     id: `dropdown-${new Date().getMilliseconds()}`
   });
-  const { focused, selectedOption, visible, activeIndex } = state;
+  const { focused, selectedOption, visible, activeIndex, id } = state;
   const onSelect_ = createOnSelect(state, dispatch, onSelect);
   return (
     <DropdownContainer
@@ -81,6 +81,7 @@ const Dropdown = ({
         })}
       >
         <Panel
+          idDropdown={id}
           options={options}
           display={isDisplay(state)}
           activeIndex={activeIndex}
@@ -104,7 +105,6 @@ Dropdown.propTypes = {
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
-    PropTypes.object,
     PropTypes.bool
   ])
 };

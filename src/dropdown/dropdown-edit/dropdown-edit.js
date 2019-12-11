@@ -62,7 +62,8 @@ const Dropdown = ({
     visibleOptions,
     selectedOption,
     value,
-    focused
+    focused,
+    id
   } = state;
   const inputEl = useRef();
   const onSelect_ = createOnSelect(state, dispatch, onSelect);
@@ -125,6 +126,7 @@ const Dropdown = ({
         })}
       >
         <Panel
+          idDropdown={id}
           options={visibleOptions}
           display={isDisplay(state)}
           prefix={prefix}
@@ -149,7 +151,6 @@ Dropdown.propTypes = {
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
-    PropTypes.object,
     PropTypes.bool
   ])
 };

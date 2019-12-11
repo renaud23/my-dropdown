@@ -12,6 +12,7 @@ const Panel = ({
   activeIndex,
   selectedOption,
   onSelect,
+  idDropdown,
   optionComponent: Option
 }) => {
   const ulRef = useRef();
@@ -22,6 +23,7 @@ const Panel = ({
         {options.map(({ label, value }, index) => (
           <li
             key={value}
+            id={`${idDropdown}-option-${value}`}
             onMouseEnter={() => handleActive(index)}
             onClick={e => {
               e.stopPropagation();
@@ -55,6 +57,7 @@ const propTypesOption = PropTypes.shape({
 });
 
 Panel.propTypes = {
+  idDropdown: PropTypes.string.isRequired,
   prefix: PropTypes.string,
   onSelect: PropTypes.func,
   handleActive: PropTypes.func.isRequired,
