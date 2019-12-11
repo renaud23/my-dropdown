@@ -1,12 +1,8 @@
 import * as actions from "../commons/actions";
-import { filterOption } from "./prefix-tools";
-import { preparePrefix } from "./prefix-tools";
 import { scrollTo } from "../commons/tools";
 
 export const initial = {
-  prefix: undefined,
   options: [],
-  visibleOptions: [],
   visible: false,
   activeIndex: undefined,
   selectedOption: undefined,
@@ -15,47 +11,43 @@ export const initial = {
 };
 
 /** */
-const isPrefix = prefix => prefix !== undefined && prefix.length > 0;
-
-/** */
 const reduceArrowDownPressed = state => {
-  const { visibleOptions, activeIndex } = state;
-  const next = visibleOptions.length
+  const { options, activeIndex } = state;
+  const next = options.length
     ? Math.min(
-        visibleOptions.length - 1,
+        options.length - 1,
         activeIndex === undefined ? 0 : activeIndex + 1
       )
     : undefined;
   if (next !== undefined) {
-    scrollTo(`${state.id}-option-${visibleOptions[next].value}`);
+    scrollTo(`${state.id}-option-${options[next].value}`);
   }
   return { ...state, activeIndex: next };
 };
 
 /** */
 const reduceArrowUpPressed = state => {
-  const { visibleOptions, activeIndex } = state;
-  const next = visibleOptions.length
+  const { options, activeIndex } = state;
+  const next = options.length
     ? Math.max(0, activeIndex === undefined ? 0 : activeIndex - 1)
     : undefined;
 
   if (next !== undefined) {
-    scrollTo(`${state.id}-option-${visibleOptions[next].value}`);
+    scrollTo(`${state.id}-option-${options[next].value}`);
   }
   return { ...state, activeIndex: next };
 };
 
 /** */
 const reduceEnterPressed = (state, callback) => {
-  const { activeIndex, visibleOptions } = state;
+  const { activeIndex, options } = state;
   if (activeIndex !== undefined) {
-    const option = visibleOptions[activeIndex];
+    const option = options[activeIndex];
     callback(option);
     return {
       ...state,
       selectedOption: option,
       value: option.label,
-      prefix: preparePrefix(option.label),
       visible: false
     };
   }
@@ -81,23 +73,9 @@ const reducer = (state, action) => {
     }
     case actions.SET_OPTIONS: {
       const { options } = payload;
-      const { prefix } = state;
       return {
         ...state,
-        options,
-        visibleOptions: isPrefix(prefix) ? filterOption(options) : options
-      };
-    }
-    case actions.SET_PREFIX: {
-      const { prefix } = payload;
-      const { options } = state;
-      return {
-        ...state,
-        prefix,
-        activeIndex: undefined,
-        visibleOptions: isPrefix(prefix)
-          ? filterOption(options, prefix)
-          : options
+        options
       };
     }
     case actions.SET_VALUE: {
@@ -109,8 +87,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         value: option.label,
-        selectedOption: option,
-        prefix: preparePrefix(option.label)
+        selectedOption: option
       };
     }
     case actions.SET_FOCUSED: {
@@ -120,12 +97,10 @@ const reducer = (state, action) => {
     case actions.RESET_SELECTION: {
       return {
         ...state,
-        prefix: undefined,
         value: "",
         selectedOption: undefined,
         activeIndex: undefined,
-        activeOption: undefined,
-        visibleOptions: state.options
+        activeOption: undefined
       };
     }
     case actions.ARROW_UP_PRESSED: {

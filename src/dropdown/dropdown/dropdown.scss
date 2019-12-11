@@ -1,0 +1,149 @@
+$inputHeight: 32px;
+$boxShadowColor: #aaa;
+
+@mixin defaultFont {
+  font-family: Georgia, Times, "Times New Roman", serif;
+  font-size: 16px;
+}
+
+.dropdown {
+  display: block;
+  position: relative;
+  height: $inputHeight;
+  width: 100%;
+  &:focus {
+    outline: none;
+  }
+
+  .dropdown-label {
+    @include defaultFont();
+    color: rgb(0, 123, 255);
+    position: absolute;
+    left: 0;
+    top: -26px;
+    opacity: 1;
+  }
+
+  .dropdown-container {
+    background-color: lavenderblush;
+    border-radius: 20px 20px;
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: $inputHeight;
+
+    &.visible {
+      border-radius: 16px 16px;
+      height: auto;
+    }
+    &:focus {
+      outline: none;
+    }
+
+    box-shadow: 0em 0em 0.1em 0.1em $boxShadowColor;
+    &.focused {
+      box-shadow: 0 0 0 0.2em rgba(0, 123, 255, 0.25);
+    }
+
+    .dropdown-button {
+      button {
+        @include defaultFont();
+        padding: 0;
+        margin: 0px 30px 0px 20px;
+        width: calc(100% - 37px);
+        background-color: transparent;
+        height: $inputHeight;
+        border: none;
+        outline: none;
+        text-align: left;
+      }
+    }
+
+    .icone {
+      cursor: pointer;
+      position: absolute;
+      right: 10px;
+      top: 7px;
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .transition {
+      visibility: hidden;
+      overflow-y: hidden;
+      opacity: 0;
+
+      &:focus {
+        outline: none;
+      }
+
+      &.visible {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 1s ease-out;
+      }
+
+      .dropdown-panel {
+        background-color: transparent;
+        margin: 0 10px 12px 10px;
+        list-style: none;
+        padding: 0;
+        &:focus {
+          outline: none;
+        }
+        max-height: 100px;
+        overflow-y: auto;
+
+        /* width */
+        &::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        /* Track */
+        &::-webkit-scrollbar-track {
+          background-color: lightgray;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+          background: orange;
+        }
+
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+          background: goldenrod;
+        }
+      }
+
+      /** options style */
+      .dropdown-option {
+        cursor: pointer;
+        @include defaultFont();
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: black;
+
+        display: block;
+
+        &.dropdown-option-active {
+          color: ivory;
+          background-color: midnightblue;
+        }
+
+        &.dropdown-option-selected {
+          color: snow;
+          background-color: rgb(136, 19, 151);
+
+          &.dropdown-option-active {
+            color: khaki;
+            background-color: rgb(188, 90, 201);
+          }
+        }
+      }
+    }
+  }
+}
