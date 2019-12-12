@@ -85,7 +85,7 @@ const DropdownContainer = ({
 
   return (
     <div
-      className={classnames(className ? className : "lunatic-dropdown", {
+      className={classnames(className, {
         focused
       })}
       tabIndex="-1"
@@ -98,12 +98,16 @@ const DropdownContainer = ({
       <div
         tabIndex="-1"
         style={{ zIndex: zIndex || 0 }}
-        className={classnames("lunatic-dropdown-container", {
-          visible,
-          focused
-        })}
+        className="lunatic-dropdown-container"
       >
-        {children}
+        <span
+          className={classnames("lunatic-dropdown-content", {
+            focused,
+            visible
+          })}
+        >
+          {children}
+        </span>
       </div>
     </div>
   );

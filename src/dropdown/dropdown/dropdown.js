@@ -59,7 +59,7 @@ const Dropdown = ({
   const onSelect_ = createOnSelect(state, dispatch, onSelect);
   return (
     <DropdownContainer
-      className={className}
+      className={className || "lunatic-dropdown-classic"}
       state={state}
       dispatch={dispatch}
       options={options}

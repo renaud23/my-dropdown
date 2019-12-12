@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import DropdownEdit, { Option } from "./dropdown/dropdown-edit";
 import Dropdown, { Option as OptionSimple } from "./dropdown/dropdown";
 import "./application.scss";
-import "./dropdown/themes/dropdown-classic.scss";
+import "./dropdown/themes/dropdown-basic.scss";
 
 ReactDOM.render(
   <div className="application">
